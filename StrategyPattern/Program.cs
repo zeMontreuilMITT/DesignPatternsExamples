@@ -1,4 +1,6 @@
-﻿Duck newMallard = new MallardDuck();
+﻿
+/*
+Duck newMallard = new MallardDuck();
 Duck streamerDuck = new FuegianSteamerDuck();
 
 newMallard.PerformQuack();
@@ -6,7 +8,7 @@ streamerDuck.PerformQuack();
 newMallard.PerformFly();
 streamerDuck.PerformFly();
 newMallard.Swim();
-streamerDuck.Swim();
+streamerDuck.Swim(); */
 
 public abstract class Duck
 {
