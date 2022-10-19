@@ -1,36 +1,13 @@
-﻿// abstract beverage class
-using System.ComponentModel;
+﻿// start by creating an instance of the base abstract class
+Beverage CoffeeOrder = new DripCoffee();
 
-Beverage CoffeeBeverage = new DripCoffee();
-CoffeeBeverage = new Sugar(CoffeeBeverage);
-CoffeeBeverage = new Sugar(CoffeeBeverage);
+// redefine that instance as a decorator, which itself contains the original reference as a property
+CoffeeOrder = new Sugar(CoffeeOrder);
+CoffeeOrder = new MilkCondiment(CoffeeOrder);
 
-Beverage SecondCoffee = CoffeeBeverage;
-Beverage ThirdCoffee = CoffeeBeverage;
+// most recent new decorator refers down chain back to the initial instance
+Console.WriteLine(CoffeeOrder.Cost());
 
-Console.WriteLine(CoffeeBeverage.GetDescription());
-Console.WriteLine(SecondCoffee.GetDescription());
-Console.WriteLine(ThirdCoffee.GetDescription());
-
-ThirdCoffee = new Sugar(ThirdCoffee);
-Console.WriteLine("Add Sugar to new Coffee");
-
-Console.WriteLine(CoffeeBeverage.GetDescription());
-Console.WriteLine(SecondCoffee.GetDescription());
-Console.WriteLine(ThirdCoffee.GetDescription());
-
-CoffeeBeverage = new Sugar(CoffeeBeverage);
-Console.WriteLine(CoffeeBeverage.GetDescription());
-Console.WriteLine(SecondCoffee.GetDescription());
-Console.WriteLine(ThirdCoffee.GetDescription());
-
-
-
-Console.WriteLine(ThirdCoffee.Cost());
-
-/* Coffee with Sugar Sugar (Sugar OR Sugar?)
-
- */
 public abstract class Beverage
 {
     protected string _description { get;  set; }
