@@ -1,107 +1,120 @@
-﻿
-/*
-Duck newMallard = new MallardDuck();
-Duck streamerDuck = new FuegianSteamerDuck();
+﻿// abstract beverage class
+using System.ComponentModel;
 
-newMallard.PerformQuack();
-streamerDuck.PerformQuack();
-newMallard.PerformFly();
-streamerDuck.PerformFly();
-newMallard.Swim();
-streamerDuck.Swim(); */
+Beverage CoffeeBeverage = new DripCoffee();
+CoffeeBeverage = new Sugar(CoffeeBeverage);
+CoffeeBeverage = new Sugar(CoffeeBeverage);
 
-public abstract class Duck
+Beverage SecondCoffee = CoffeeBeverage;
+Beverage ThirdCoffee = CoffeeBeverage;
+
+Console.WriteLine(CoffeeBeverage.GetDescription());
+Console.WriteLine(SecondCoffee.GetDescription());
+Console.WriteLine(ThirdCoffee.GetDescription());
+
+ThirdCoffee = new Sugar(ThirdCoffee);
+Console.WriteLine("Add Sugar to new Coffee");
+
+Console.WriteLine(CoffeeBeverage.GetDescription());
+Console.WriteLine(SecondCoffee.GetDescription());
+Console.WriteLine(ThirdCoffee.GetDescription());
+
+CoffeeBeverage = new Sugar(CoffeeBeverage);
+Console.WriteLine(CoffeeBeverage.GetDescription());
+Console.WriteLine(SecondCoffee.GetDescription());
+Console.WriteLine(ThirdCoffee.GetDescription());
+
+
+
+Console.WriteLine(ThirdCoffee.Cost());
+
+/* Coffee with Sugar Sugar (Sugar OR Sugar?)
+
+ */
+public abstract class Beverage
 {
-    public IFlyBehaviour FlyBehaviour { get; set; }
-    public IQuackBehaviour QuackBehaviour { get; set; }
-    public void PerformFly()
+    protected string _description { get;  set; }
+    public virtual string GetDescription()
     {
-        FlyBehaviour.Fly();
+        return _description;
     }
 
-    public void PerformQuack()
+    protected double _cost { get; set; }
+    public virtual double Cost()
     {
-        QuackBehaviour.Quack();
-    }
-
-    public void Swim()
-    {
-        Console.WriteLine("All ducks can swim, including this one.");
-    }
-
-}
-
-public class RoboDuck: Duck
-{
-    public RoboDuck()
-    {
-        FlyBehaviour = new PropellerFlyBehaviour();
-        QuackBehaviour = new QuackLikeADuckBehaviour();
-    }
-}
-
-public class MallardDuck: Duck
-{
-    public MallardDuck()
-    {
-        FlyBehaviour = new WingedFlyBehaviour();
-        QuackBehaviour = new QuackLikeADuckBehaviour();
-    }
-    // a mallard can fly
-    // a mallard quacks
-}
-
-public class FuegianSteamerDuck: Duck
-{
-    public FuegianSteamerDuck()
-    {
-        FlyBehaviour = new FlightlessFlyBehaviour();
-        QuackBehaviour = new QuackLikeADuckBehaviour();
-    }
-    // cannot fly
-    // probably quacks
-}
-
-
-
-public interface IFlyBehaviour
-{
-    public void Fly();
-}
-
-public class WingedFlyBehaviour : IFlyBehaviour
-{
-    public void Fly()
-    {
-        Console.WriteLine("The duck flies with its wings.");
+        return _cost;
     }
 }
 
-public class FlightlessFlyBehaviour: IFlyBehaviour
+public class DripCoffee: Beverage
 {
-    public void Fly()
+    public DripCoffee()
     {
-        Console.WriteLine("This duck does not fly.");
+        _cost = 1.00;
+        _description = "Columbian Coffee";
     }
 }
 
-public class PropellerFlyBehaviour: IFlyBehaviour
+public class Tea: Beverage
 {
-    public void Fly()
+    public Tea()
     {
-        Console.WriteLine("The duck flies away with propellers somehow.");
+        _description = "English Tea";
+        _cost = 0.50;
     }
 }
 
-public interface IQuackBehaviour
+public class MilkBeverage: Beverage
 {
-    public void Quack();
+    public MilkBeverage()
+    {
+        _description = "Milk that you drink";
+        _cost = 2.00;
+    }
+}
+public abstract class CondimentDecorator : Beverage
+{
+    public Beverage Beverage { get; set; }
+    public abstract override string GetDescription();
+    public abstract override double Cost();
 }
 
-public class QuackLikeADuckBehaviour: IQuackBehaviour
+public class Sugar: CondimentDecorator
 {
-    public void Quack()
+    public override double Cost()
     {
-        Console.WriteLine("The duck makes a quacking sound.");
+        return Beverage.Cost() + _cost;
+    }
+
+    public override string GetDescription()
+    {
+        return $"{Beverage.GetDescription()}, {_description}";
+    }
+
+    public Sugar(Beverage beverage)
+    {
+        Beverage = beverage;
+        _cost = 0.2;
+        _description = "Sugar";
+    }
+}
+
+public class MilkCondiment: CondimentDecorator
+{
+    public override double Cost()
+    {
+        return Beverage.Cost() + _cost;
+    }
+
+    public override string GetDescription()
+    {
+        return $"{Beverage.GetDescription()}, {_description}";
+    }
+
+    public MilkCondiment(Beverage beverage)
+    {
+        Beverage = beverage;
+        _cost = 0.15;
+        _description = "Milk";
     }
 }
