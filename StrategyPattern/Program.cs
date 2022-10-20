@@ -1,4 +1,7 @@
 ﻿// start by creating an instance of the base abstract class
+using StrategyPattern;
+
+/*
 Beverage CoffeeOrder = new DripCoffee();
 
 // redefine that instance as a decorator, which itself contains the original reference as a property
@@ -7,6 +10,14 @@ CoffeeOrder = new MilkCondiment(CoffeeOrder);
 
 // most recent new decorator refers down chain back to the initial instance
 Console.WriteLine(CoffeeOrder.Cost());
+*/
+
+// CAR EXAMPLE
+
+Car HondaAccord = new BaseVehicle(2020, "Accord", 30000, "Sedan", "Blue");
+HondaAccord = new HeatedSeats(HondaAccord);
+HondaAccord = new RemoteStart(HondaAccord);
+HondaAccord = new AlloyRims(HondaAccord);
 
 public abstract class Beverage
 {
@@ -31,7 +42,6 @@ public class DripCoffee: Beverage
         _description = "Columbian Coffee";
     }
 }
-
 public class Tea: Beverage
 {
     public Tea()
@@ -40,7 +50,6 @@ public class Tea: Beverage
         _cost = 0.50;
     }
 }
-
 public class MilkBeverage: Beverage
 {
     public MilkBeverage()
