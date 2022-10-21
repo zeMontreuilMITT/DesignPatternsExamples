@@ -1,107 +1,136 @@
-﻿
-/*
-Duck newMallard = new MallardDuck();
-Duck streamerDuck = new FuegianSteamerDuck();
+﻿PizzaStore winnipegChain = new WinnipegPizzaStore();
+PizzaStore nfldChain = new NewFoundLandPizzaStore();
 
-newMallard.PerformQuack();
-streamerDuck.PerformQuack();
-newMallard.PerformFly();
-streamerDuck.PerformFly();
-newMallard.Swim();
-streamerDuck.Swim(); */
+winnipegChain.OrderPizza("special");
+nfldChain.OrderPizza("special");
 
-public abstract class Duck
+winnipegChain.OrderPizza("cod");
+nfldChain.OrderPizza("cod");
+
+
+public abstract class PizzaStore
 {
-    public IFlyBehaviour FlyBehaviour { get; set; }
-    public IQuackBehaviour QuackBehaviour { get; set; }
-    public void PerformFly()
+    public Pizza OrderPizza(string type)
     {
-        FlyBehaviour.Fly();
+        Pizza pizza;
+
+        // creating pizza (deciding on the instance that we want to use) WILL change at different locations
+        // this process will never change, regardless of what our store   
+        try
+        {
+            pizza = CreatePizza(type);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Sorry, we don't have that kind of pizza. Try our cheese pizza instead.");
+            pizza = CreatePizza("cheese");
+        }
+
+        pizza.Prepare();
+        pizza.Bake();
+        pizza.Cut();
+
+        return pizza;
     }
 
-    public void PerformQuack()
-    {
-        QuackBehaviour.Quack();
-    }
-
-    public void Swim()
-    {
-        Console.WriteLine("All ducks can swim, including this one.");
-    }
-
+    // how we instantiate the Pizza depends upon the type of store
+    // "factory" method
+    protected abstract Pizza CreatePizza(string type);
 }
 
-public class RoboDuck: Duck
+public class NewFoundLandPizzaStore: PizzaStore
 {
-    public RoboDuck()
+    protected override Pizza CreatePizza(string type)
     {
-        FlyBehaviour = new PropellerFlyBehaviour();
-        QuackBehaviour = new QuackLikeADuckBehaviour();
+        Pizza pizza;
+
+        switch (type)
+        {
+            case "special":
+                pizza = new LobsterPizza();
+                break;
+            case "cheese":
+                pizza = new CheddarPizza();
+                break;
+            case "cod":
+                pizza = new CodPizza();
+                break;
+            default:
+                throw new ArgumentException();
+        }
+
+        return pizza;
     }
 }
-
-public class MallardDuck: Duck
+public class WinnipegPizzaStore: PizzaStore
 {
-    public MallardDuck()
+    protected override Pizza CreatePizza(string type)
     {
-        FlyBehaviour = new WingedFlyBehaviour();
-        QuackBehaviour = new QuackLikeADuckBehaviour();
-    }
-    // a mallard can fly
-    // a mallard quacks
-}
+        Pizza pizza;
 
-public class FuegianSteamerDuck: Duck
-{
-    public FuegianSteamerDuck()
-    {
-        FlyBehaviour = new FlightlessFlyBehaviour();
-        QuackBehaviour = new QuackLikeADuckBehaviour();
-    }
-    // cannot fly
-    // probably quacks
-}
+        switch (type)
+        {
+            case "special":
+                pizza = new SlurpeePizza();
+                break;
+            case "cheese":
+                pizza = new MozarellaPizza();
+                break;
+            default:
+                throw new ArgumentException();
+        }
 
-
-
-public interface IFlyBehaviour
-{
-    public void Fly();
-}
-
-public class WingedFlyBehaviour : IFlyBehaviour
-{
-    public void Fly()
-    {
-        Console.WriteLine("The duck flies with its wings.");
-    }
-}
-
-public class FlightlessFlyBehaviour: IFlyBehaviour
-{
-    public void Fly()
-    {
-        Console.WriteLine("This duck does not fly.");
-    }
-}
-
-public class PropellerFlyBehaviour: IFlyBehaviour
-{
-    public void Fly()
-    {
-        Console.WriteLine("The duck flies away with propellers somehow.");
+        return pizza;
     }
 }
 
-public interface IQuackBehaviour
+public abstract class Pizza
 {
-    public void Quack();
-}
-
-public class QuackLikeADuckBehaviour: IQuackBehaviour
-{
-    public void Quack()
+    public void Bake()
     {
-        Console.WriteLine("The duck makes a quacking sound.");
+        Console.WriteLine("Baking the pizza");
+    }
+
+    public void Cut()
+    {
+        Console.WriteLine("Cutting the Pizza");
+    }
+
+    public abstract void Prepare();
+}
+public class LobsterPizza: Pizza
+{
+    public override void Prepare()
+    {
+        Console.WriteLine("Putting lobster on the pizza");
+    }
+}
+public class MozarellaPizza : Pizza
+{
+    public override void Prepare()
+    {
+        Console.WriteLine("Putting mozarella on the pizza.");
+    }
+}
+public class CheddarPizza: Pizza
+{
+    public override void Prepare() 
+    {
+        Console.WriteLine("Putting cheddar on the pizza");
+    }
+}
+public class SlurpeePizza: Pizza
+{
+    public override void Prepare()
+    {
+        Console.WriteLine("Pouring out the slurpee all over the pizza.");
+    }
+}
+public class CodPizza: Pizza
+{
+    public override void Prepare()
+    {
+        Console.WriteLine("Putting some cod on the pizza");
     }
 }
