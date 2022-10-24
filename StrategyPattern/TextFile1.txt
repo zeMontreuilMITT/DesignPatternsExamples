@@ -1,0 +1,15 @@
+﻿You are writing software for an automated student registration system. 
+Which pattern is best applied to each of these scenarios?
+
+- Students are classified within different streams of study from the beginning.
+A number of codes are shared between all student IDs, but the same code
+indicates different accreditations between different streams.
+
+- Students can gradually add different accreditations as they complete
+their studies. Any student can potentially gain any different number of 
+accreditations, and different accreditations provide access to later courses
+in that stream.
+
+- Students can sign up for a combination of different streams at the start.
+Each stream is rigidly defined from start to finish, but students are able to switch
+their streams.
